@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { Container } from "@/components/container";
 import { TicketItem } from "./_components/ticket";
 
-export default async function painel() {
+export default async function Dashboard() {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
