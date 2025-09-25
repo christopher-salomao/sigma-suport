@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Container } from "./container";
 import { FiUser, FiLogOut, FiLoader, FiLock } from "react-icons/fi";
 import Link from "next/link";
+import { ThemeSwitch } from "@/components/themeSwitch";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 export function Header() {
@@ -36,15 +37,19 @@ export function Header() {
           </Link>
 
           {status === "loading" && (
-            <button className="animate-spin">
-              <FiLoader size={26} color="white" />
-            </button>
+            <div className="flex items-center gap-4">
+              <FiLoader size={26} color="white" className="animate-spin" />
+              <ThemeSwitch />
+            </div>
           )}
 
           {status === "unauthenticated" && (
-            <button onClick={handleLogin} title="Login">
-              <FiLock size={26} color="white" />
-            </button>
+            <div className="flex items-center gap-4">
+              <button onClick={handleLogin} title="Login">
+                <FiLock size={26} color="white" />
+              </button>
+              <ThemeSwitch />
+            </div>
           )}
 
           {status === "authenticated" && (
@@ -55,6 +60,7 @@ export function Header() {
               <button onClick={handleLogout}>
                 <FiLogOut size={26} color="#ff2313" />
               </button>
+              <ThemeSwitch />
             </div>
           )}
         </div>
