@@ -3,22 +3,34 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema, type FormData } from "./schema";
+import { api } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 import { Input } from "@/components/input";
 
-export function NewCustomerForm() {
+export function NewCustomerForm({ userId }: { userId: string }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
 
-  async function handleRegisterCUstomer(data: FormData) {
-    console.log(data);
+  const router = useRouter();
+
+  async function handleRegisterCustomer(data: FormData) {
+    await api.post("/api/cliente", {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      adress: data.adress,
+      userId,
+    });
+
+    router.refresh();
+    router.replace("/painel/clientes");
   }
 
   function blockInputLetters(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -47,7 +59,10 @@ export function NewCustomerForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(handleRegisterCUstomer)} className="flex flex-col gap-2">
+    <form
+      onSubmit={handleSubmit(handleRegisterCustomer)}
+      className="flex flex-col gap-2"
+    >
       <div className="flex flex-col gap-2 mt-6 mb-1">
         <label htmlFor="name" className="text-lg font-medium">
           * Nome completo:
@@ -96,14 +111,17 @@ export function NewCustomerForm() {
         </label>
         <Input
           type="text"
-          name="adrees"
+          name="adress"
           placeholder="Digite o endereço completo do cliente"
-          error={errors.adrees?.message}
+          error={errors.adress?.message}
           register={register}
         />
       </div>
 
-      <button type="submit" className="bg-blue-500 hover:bg-blue-600 transition-all duration-300 h-11 text-white font-bold rounded my-4">
+      <button
+        type="submit"
+        className="bg-blue-500 hover:bg-blue-600 transition-all duration-300 h-11 text-white font-bold rounded my-4"
+      >
         Cadastrar
       </button>
     </form>

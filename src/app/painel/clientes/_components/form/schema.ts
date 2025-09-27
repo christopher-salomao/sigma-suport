@@ -19,7 +19,7 @@ export const schema = z.object({
       }
     ),
   email: z.email("Insira um email valido").nonempty("O email é obrigatório"),
-  adrees: z.string(),
+  adress: z.string(),
 });
 
 export type FormData = z.infer<typeof schema>;
