@@ -22,8 +22,6 @@ export default async function Customers() {
     where: { userId: session.user.id },
   });
 
-  console.log(customers);
-
   return (
     <main className="w-full">
       <Container>
@@ -44,6 +42,12 @@ export default async function Customers() {
             ))}
           </div>
         </section>
+
+        {customers.length === 0 && (
+          <div className="flex items-center justify-center my-4">
+            <h1 className="text-2xl font-bold">Você ainda não possui nenhum cliente</h1>
+          </div>
+        )}
       </Container>
     </main>
   );
