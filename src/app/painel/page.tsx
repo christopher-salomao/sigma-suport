@@ -22,6 +22,9 @@ export default async function Dashboard() {
     include: {
       Customer: true,
     },
+    orderBy: {
+      status: "asc",
+    }
   });
 
   return (
@@ -60,6 +63,11 @@ export default async function Dashboard() {
               ))}
             </tbody>
           </table>
+          {
+            tickets.length === 0 && (
+              <p className="px-2 md:px-0 text-gray-500 mt-5">Nenhum chamado encontrado</p>
+            )
+          }
         </section>
       </Container>
     </main>
