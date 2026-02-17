@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/input";
-import { z } from "zod";
+import { set, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { api } from "@/lib/api";
@@ -36,7 +36,8 @@ export function FormTicket({ customer }: FormTicketProps) {
       description: data.description,
     });
 
-    console.log(response.data);
+    setValue("name", "");
+    setValue("description", "");
   }
 
   return (
@@ -44,7 +45,7 @@ export function FormTicket({ customer }: FormTicketProps) {
       className="bg-slate-200 dark:bg-slate-800 mt-6 px-4 py-6 border-2 border-transparent"
       onSubmit={handleSubmit(handleRegisterTicket)}
     >
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 [&>input]:bg-white [&>input]:dark:bg-transparent">
         <label htmlFor="name" className="font-medium text-lg">
           Nome do chamado:
         </label>
@@ -62,7 +63,7 @@ export function FormTicket({ customer }: FormTicketProps) {
         </label>
         <textarea
           id="description"
-          className="w-full border-2 border-slate-200 rounded-md px-2 h-24 outline-none resize-none"
+          className="w-full border-2 border-slate-200 rounded-md px-2 h-24 outline-none resize-none bg-white dark:bg-transparent"
           placeholder="Descreva o seu problema..."
           {...register("description")}
         ></textarea>
