@@ -4,6 +4,9 @@ import { Input } from "@/components/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { api } from "@/lib/api";
+
+import { CustomerDataInfo } from "../page";
 
 const schema = z.object({
   name: z.string().nonempty("O nome do chamado é obrigatório"),
@@ -12,7 +15,11 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export function FormTicket() {
+interface FormTicketProps {
+  customer: CustomerDataInfo;
+}
+
+export function FormTicket({ customer }: FormTicketProps) {
   const {
     register,
     handleSubmit,
@@ -22,8 +29,21 @@ export function FormTicket() {
     resolver: zodResolver(schema),
   });
 
+  async function handleRegisterTicket(data: FormData) {
+    const response = await api.post("/api/ticket", {
+      customerId: customer?.id,
+      name: data.name,
+      description: data.description,
+    });
+
+    console.log(response.data);
+  }
+
   return (
-    <form className="bg-slate-200 dark:bg-slate-800 mt-6 px-4 py-6 border-2 border-transparent">
+    <form
+      className="bg-slate-200 dark:bg-slate-800 mt-6 px-4 py-6 border-2 border-transparent"
+      onSubmit={handleSubmit(handleRegisterTicket)}
+    >
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className="font-medium text-lg">
           Nome do chamado:
@@ -47,16 +67,17 @@ export function FormTicket() {
           {...register("description")}
         ></textarea>
         {errors.description && (
-          <p className="text-red-500 my-1">{errors.description?.message}</p>
+          <p className="text-red-500 mt-1 mb-4">
+            {errors.description?.message}
+          </p>
         )}
-
       </div>
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-600 transition-all duration-300 px-4 py-1 text-white font-medium rounded h-11 w-full mt-4"
-        >
-          Cadastrar
-        </button>
+      <button
+        type="submit"
+        className="bg-blue-500 hover:bg-blue-600 transition-all duration-300 px-4 py-1 text-white font-medium rounded h-11 w-full mt-4"
+      >
+        Cadastrar
+      </button>
     </form>
   );
 }
